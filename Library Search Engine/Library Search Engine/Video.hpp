@@ -52,8 +52,9 @@ field description,
 public:
     
     // Paramaterized constructor
-    Video(std::string callNumber, std::string title, std::string subject, std::string description,
-          std::string distributor, std::string notes, std::string series, std::string label);
+    Video(const std::string callNumber,  const std::string title, const std::string subject, const std::string description,
+          
+          const std::string distributor, const std::string notes, const std::string series,  const std::string label);
     
     // Determine if keyword is present in description, notes and distributor
     bool Contains_Other(std::string other) override;

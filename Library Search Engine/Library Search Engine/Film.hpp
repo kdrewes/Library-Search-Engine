@@ -49,10 +49,10 @@ field director,
 public:
     
     // Paramaterized constructor
-    Film(std::string callNumber, std::string title, std::string subject, std::string director, std::string notes, std::string year);
+    Film(const std::string callNumber, const std::string title, const std::string subject, const std::string director, const std::string notes, const std::string year);
     
     // Determine if keyword is present in notes, director and year
-    bool Contains_Other(std::string other) override;
+    bool Contains_Other(const std::string other) override;
     
     // Print criteria from film record(s)
     void Print(SEARCH_TYPE search, std::vector<Media*> Library_Records) override;

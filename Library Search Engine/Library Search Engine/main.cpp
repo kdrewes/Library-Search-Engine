@@ -154,6 +154,7 @@ int main(int argc, const char * argv[]) {
         isValid = true;
     }
     
+    // Invalid argument which can still be corrected
     catch(std::invalid_argument exception)
     {
         std::cout << exception.what();
@@ -379,7 +380,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.callNumber = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -397,7 +398,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.title = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -418,7 +419,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.subject = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -438,7 +439,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.author = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -460,7 +461,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.description = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -482,7 +483,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.distibutor = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -504,7 +505,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.publisher = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -526,7 +527,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.city = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -548,7 +549,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.year = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -570,7 +571,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.series = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         
@@ -602,7 +603,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         else if (character == '|')
                         {
                             fieldPackage.notes = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
                         

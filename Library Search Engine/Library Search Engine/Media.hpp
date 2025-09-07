@@ -49,7 +49,7 @@ std::string callNumber,
 public:
     
     // Paramaterized constructor
-    Media(std::string callNumber, std::string title, std::string subjects, std::string notes);
+    Media(const std::string callNumber, const std::string title, const std::string subjects, const std::string notes);
     
     
     virtual ~Media();

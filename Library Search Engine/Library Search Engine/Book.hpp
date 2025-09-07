@@ -54,11 +54,12 @@ field author,
 public:
     
     // Paramaterized constructor
-    Book(std::string callNumber, std::string title, std::string subject, std::string author, std::string description,
-         std::string publisher,  std::string city,  std::string year,    std::string series, std::string notes);
+    Book(const std::string callNumber, const std::string title, const std::string subject, const std::string author, const std::string description,
+         
+         const std::string publisher,  const std::string city,  const std::string year,    const std::string series, const std::string notes);
     
     // Determine if keyword is present in description, notes and year
-    bool Contains_Other(std::string other) override;
+    bool Contains_Other(const std::string other) override;
     
     // Print criteria from book record(s)
     void Print(SEARCH_TYPE search, std::vector<Media*> Library_Records) override;

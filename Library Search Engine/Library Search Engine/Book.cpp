@@ -35,8 +35,9 @@
 // ----------------------------------------------------------------------------------------------------
 
 // Paramaterized Constructor
-Book :: Book (std::string callNumber, std::string title, std::string subject, std::string auth, std::string desc,
-              std::string pub,  std::string cty,  std::string yr, std::string ser, std::string notes)
+Book :: Book (const std::string callNumber, const std::string title, const std::string subject, const std::string auth, const std::string desc,
+              
+              const std::string pub,        const std::string cty,   const std::string yr,      const std::string ser,  const std::string notes)
 
 : Media(callNumber, title, subject, notes),
 
@@ -44,7 +45,7 @@ Book :: Book (std::string callNumber, std::string title, std::string subject, st
 
 // ----------------------------------------------------------------------------------------------------
 // Determine if keyword is present in description, notes and year
-bool Book :: Contains_Other(std::string keyword)
+bool Book :: Contains_Other(const std::string keyword)
 {
     if(description.find(keyword) != std::string::npos)
         return true;

@@ -33,13 +33,13 @@
 // ----------------------------------------------------------------------------------------------------
 
 // Paramaterized constructor
-Film :: Film(std::string cn, std::string t, std::string sub, std::string dir, std::string nts, std::string yr)
+Film :: Film(const std::string cn, const std::string t, const std::string sub, const std::string dir, const std::string nts, const std::string yr)
 : Media(cn, t, sub, nts),
 director(dir), year(yr), notes(nts) {}
 
 // ----------------------------------------------------------------------------------------------------
 // Determine if keyword is present in notes, director and year
-bool Film :: Contains_Other(std::string keyword)
+bool Film :: Contains_Other(const std::string keyword)
 {
     if(notes.find(keyword) != std::string::npos)
         return true;

@@ -33,8 +33,9 @@
 // ----------------------------------------------------------------------------------------------------
 
 // Paramaterized constructor
-Video :: Video(std::string cn, std::string t, std::string sub, std::string desc,
-             std::string distr, std::string nts, std::string ser, std::string labl)
+Video :: Video(const std::string cn,    const std::string t,   const std::string sub, const std::string desc,
+               
+               const std::string distr, const std::string nts, const std::string ser, const std::string labl)
 
 : Media(cn, t, sub, nts),
 description(desc), distributor(distr), notes(nts), series(ser), label(labl) {}

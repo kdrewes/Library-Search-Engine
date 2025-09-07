@@ -34,7 +34,7 @@
 //--------------------------------------------------------------------------------
 
 // Paramaterized constructor
-Media :: Media(std::string cn, std::string t, std::string s, std::string n)
+Media :: Media(const std::string cn, const std::string t, const std::string s, const std::string n)
 : callNumber(cn), title(t), subject(s), notes(n) {}
 
 Media :: ~Media()
