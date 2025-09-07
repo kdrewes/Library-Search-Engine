@@ -394,6 +394,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.callNumber = field;
@@ -411,6 +412,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.title = field;
@@ -431,6 +433,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.subject = field;
@@ -450,6 +453,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.author = field;
@@ -471,6 +475,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.description = field;
@@ -492,6 +497,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.distibutor = field;
@@ -513,6 +519,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.publisher = field;
@@ -520,6 +527,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else
                             field += character;
                         
@@ -533,6 +541,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.city = field;
@@ -540,7 +549,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             field = "";
                             return true;
                         }
-                        else field += character;
+                        
+                        else
+                            field += character;
+                        
                         return false;
                         
                     case YEAR_FIELD:
@@ -551,6 +563,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.year = field;
@@ -572,6 +585,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             countIndex++;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.series = field;
@@ -579,12 +593,14 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else
                             field += character;
                         
                         return false;
                         
                     case NOTES_FIELD:
+                        
                         if (character == '\n' || read.peek() == '\n')
                         {
                             fieldPackage.notes = field;
@@ -594,12 +610,14 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else if (character == '|')
                         {
                             fieldPackage.notes = field;
                             countIndex++;
                             field = "";
                         }
+                        
                         else
                             field += character;
                         
