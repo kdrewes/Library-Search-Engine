@@ -113,20 +113,8 @@ void Router();
 // Executes logic
 void Controller(SEARCH_TYPE search);
 
-// Search for call number of media type
-void Call_Number(std::string keyword);
-
-// Search for subject of media type
-void Subject(std::string keyword);
-
-// Search for title of media type
-void Title(std::string keyword);
-
-// Search for other media type
-void Other(std::string key);
-
 // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt
-void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * & m, std::vector<Media *> Library_Records, incrementer fileIncrementer, std::string keyword);
+void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * & m, std::vector<Media *> Library_Records, incrementer fileIncrementer, const std::string keyword);
 
 // Input validation used to handle file discrepencies
 void Verify_Record(char character, FieldStruct & fieldPackage);
@@ -135,16 +123,16 @@ void Verify_Record(char character, FieldStruct & fieldPackage);
 bool isRecord(std::ifstream &read, FieldStruct &fieldPackage, MEDIA_TYPE media, char character, std::string &field, incrementer & countIndex);
 
 // Determine if key word is detected in record
-bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, std::string keyword, incrementer &countIndex);
+bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, const std::string keyword, incrementer &countIndex);
 
 // Determine label utilized through SEARCH_TYPE enum
 SEARCH_TYPE searchType(int selection);
 
 // Determine label utilized through MEDIA_TYPE enum
-MEDIA_TYPE mediaType(std::string fileName);
+MEDIA_TYPE mediaType(const std::string fileName);
 
 // Determine label utilized through FIELD_TYPE enum
-FIELD_TYPE fieldType(std::string fieldName);
+FIELD_TYPE fieldType(const std::string fieldName);
 
 // -------------------------------------------------------------------------------------------
 
@@ -292,7 +280,7 @@ void Controller(SEARCH_TYPE search)
 
 // -------------------------------------------------------------------------------------------
 // Criteria is extracted from each Media Type: book.txt, film.txt, periodic.txt, video.txt
-void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * &m, std::vector<Media*> Library_Records, incrementer fileIncrementer, std::string keyword)
+void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * &m, std::vector<Media*> Library_Records, incrementer fileIncrementer, const std::string keyword)
 {
     // Extract field from each record
     std::string field = "";
@@ -1301,7 +1289,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, std::string keyword, incrementer &countIndex)
+bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, const std::string keyword, incrementer &countIndex)
 {
     // Update counter variable
     countIndex = 0;
@@ -1592,7 +1580,7 @@ SEARCH_TYPE searchType(int selection)
 
 // -------------------------------------------------------------------------------------------
 // Determine selected field through MEDIA_TYPE enum
-MEDIA_TYPE mediaType(std::string fileName)
+MEDIA_TYPE mediaType(const std::string fileName)
 {
     if(fileName == "book.txt")
         return MEDIA_TYPE :: BOOK;
@@ -1613,7 +1601,7 @@ MEDIA_TYPE mediaType(std::string fileName)
 
 // -------------------------------------------------------------------------------------------
 // Determine label utilized through FIELD_TYPE enum
-FIELD_TYPE fieldType(std::string fieldName)
+FIELD_TYPE fieldType(const std::string fieldName)
 {
     // const std::string fieldName [] = {"call number", "title", "subject", "author", "description", "pubilsher", "city", "year", "series", "notes"};
     
