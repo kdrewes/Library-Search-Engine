@@ -86,7 +86,7 @@ struct FieldStruct
     // Count spaces to see if record has ended
     countSpaces = 0;
     
-} fieldPackage;
+}   fieldPackage;
 
 
 // --------------------- Typedef ---------------------
@@ -226,7 +226,7 @@ void Router()
     std::cout << "Select: ";
     std::cin >> selection;
     
-    // Implement controller function
+    // Implement controller
     Controller(searchType(selection));
 }
 
@@ -234,7 +234,7 @@ void Router()
 // Executes logic
 void Controller(SEARCH_TYPE search)
 {
-    // If user selects to exit program
+    // If user selects to exit program, or if exception is encountered
     switch(search)
     {
         case EXIT:
@@ -244,7 +244,7 @@ void Controller(SEARCH_TYPE search)
         case SEARCH_TYPE_ERROR:
             throw std::invalid_argument("\n\nError - invalid option\n\nPlease re-enter below:\n\n");
             
-    }
+}
     // Add spacer
     std::cout << "\n-----------------------------------------\n\n";
     
