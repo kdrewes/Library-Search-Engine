@@ -1430,13 +1430,6 @@ bool Parse :: keyWordFound()
 }
 
 // -------------------------------------------------------------------------------------------
-// Print records
-void Parse :: Print()
-{
-    m -> Print(this -> search, this -> Library_Records);
-}
-
-// -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
 void Parse :: searchType(int selection)
 {
@@ -1544,8 +1537,6 @@ FIELD_TYPE Parse :: fieldType(const std::string fieldName)
 std::ostream & operator << (std::ostream &output, Parse &parser)
 {
     parser.Boot();
-    
-    parser.Print();
     
     return output;
     

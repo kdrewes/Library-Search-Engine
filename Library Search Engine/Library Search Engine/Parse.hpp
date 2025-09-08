@@ -141,9 +141,6 @@ public:
 
     // Input validation used to handle file discrepencies
     void Verify_Record(char character, FieldStruct & fieldPackage);
-    
-    // Print Records
-    void Print();
 
     // Determine if record is read.  Simultaneously, criteria is extracted when book.txt, film.txt, periodic,txt or video.txt is read
     bool isRecord(char isCharacter);
