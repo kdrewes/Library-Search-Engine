@@ -27,7 +27,9 @@ typedef int input, iterator, incrementer;
 
 // stringInput = User input in string format used to select menu options
 
-typedef std::string stringInput;
+// fileString = string utilized in file
+
+typedef std::string stringInput, fileString;
 
 class Parse
 {
@@ -80,8 +82,17 @@ private:
     // Declare keyword variable
     stringInput keyword;
     
+    // Extract field from each record
+    std::string field;
+    
     // Used to select option from menu
     input selection;
+    
+    // Counter used to keep track of field indices in record demonstrated below:
+    
+    // Call Number, Title, Subjects, Author, Description, Publisher, City, Year, Series, Notes
+    // |    0     |   1   |    2   |   3   |      4     |     5    |   6  |  7  |   8  |   9  |
+    incrementer countIndex;
     
     //Boolean logic to determine if do-while loop is valid
     bool isValid;
@@ -135,10 +146,10 @@ public:
     void Print();
 
     // Determine if record is read.  Simultaneously, criteria is extracted when book.txt, film.txt, periodic,txt or video.txt is read
-    bool isRecord(std::ifstream &read, FieldStruct &fieldPackage, MEDIA_TYPE media, char character, std::string &field, incrementer & countIndex);
+    bool isRecord(char isCharacter);
 
     // Determine if key word is detected in record
-    bool keyWordFound(FieldStruct &fieldPackage, Media * &m, incrementer &countIndex);
+    bool keyWordFound();
 
     // Determine label utilized through SEARCH_TYPE enum
     void searchType(int selection);

@@ -18,7 +18,11 @@ Parse :: Parse()
 {
     keyword = "";
     
+    field = "";
+    
     selection = 0;
+    
+    countIndex = 0;
     
     bool isValid = false;
     
@@ -164,21 +168,12 @@ void Parse :: Controller()
 // Criteria is extracted from each Media Type: book.txt, film.txt, periodic.txt, video.txt
 void Parse :: Read_Media()
 {
-    // Extract field from each record
-    std::string field = "";
-    
-    // Counter used to keep track of field indices in record demonstrated below:
-    
-    // Call Number, Title, Subjects, Author, Description, Publisher, City, Year, Series, Notes
-    // |    0     |   1   |    2   |   3   |      4     |     5    |   6  |  7  |   8  |   9  |
-    incrementer countIndex = 0;
-    
     // Traverse through file
     for(char character = ' '; !read.eof(); read.get(character))
     {
         // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt based on search type
-        if(isRecord(read, fieldPackage, media, character, field, countIndex))
-            if(keyWordFound(fieldPackage, m, countIndex))
+        if(isRecord(character))
+            if(keyWordFound())
                 Library_Records.push_back(m);
 
     }
@@ -221,7 +216,7 @@ void Parse :: Verify_Record(char character, Parse :: FieldStruct & fieldPackage)
 
 // -------------------------------------------------------------------------------------------
 // Determine if full record is read.  Simultaneously, criteria is extracted when book.txt, film.txt, periodic,txt or video.txt is read
-bool Parse :: isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media, char character, std::string & field, incrementer & countIndex)
+bool Parse :: isRecord(char character)
 {
     switch(media)
     {
@@ -1169,7 +1164,7 @@ bool Parse :: isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TY
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-bool Parse :: keyWordFound(FieldStruct &fieldPackage, Media * &m, incrementer &countIndex)
+bool Parse :: keyWordFound()
 {
     // Update counter variable
     countIndex = 0;
