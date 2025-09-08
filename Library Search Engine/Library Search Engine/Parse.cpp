@@ -164,6 +164,7 @@ void Parse :: Controller()
         // Read file
        read.open(fileName[index]);
         
+       // Assign value to media enum
        mediaType(fileName[index]);
         
         if(read.is_open())
