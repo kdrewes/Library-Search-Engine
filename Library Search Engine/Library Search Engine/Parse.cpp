@@ -76,6 +76,16 @@ void Parse :: Boot()
 }
 
 // -------------------------------------------------------------------------------------------
+// Reset variables
+void Parse :: Clear()
+{
+    // Clear Library Records dataset
+    Library_Records.clear();
+
+    // Close file
+    read.close();
+}
+// -------------------------------------------------------------------------------------------
 // Displays header of application
 void Parse :: Header()
 {
@@ -161,6 +171,11 @@ void Parse :: Controller()
         
         else
             throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
+        
+        // Print records for each media type
+        m -> Print (search,Library_Records);
+        
+        Clear();
     }
 }
 
@@ -177,15 +192,6 @@ void Parse :: Read_Media()
                 Library_Records.push_back(m);
 
     }
-    
-    // Print records for each media type
-    m -> Print (search,Library_Records);
-    
-    // Clear file
-    Library_Records.clear();
-
-    // Close file
-    read.close();
 }
 
 // -------------------------------------------------------------------------------------------

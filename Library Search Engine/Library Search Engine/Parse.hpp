@@ -147,6 +147,9 @@ public:
     // Initiate application
     void Boot();
     
+    // Reset variables
+    void Clear();
+    
     // Displays header of application
     void Header();
 
