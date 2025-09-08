@@ -87,6 +87,8 @@ public:
     
     std::string GetNotes() const;
     
+    friend class Parse;
+    
 };
 
 

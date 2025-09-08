@@ -93,6 +93,8 @@ public:
     std::string GetLabel() const override;
     
     std::string GetNotes() const;
+    
+    friend class Parse;
  
 };
 

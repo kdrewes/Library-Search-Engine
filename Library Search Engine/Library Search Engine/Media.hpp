@@ -35,6 +35,8 @@
 #include <iostream>
 #include "Enum.hpp"
 
+class Parse;
+
 class Media
 {
     
@@ -103,6 +105,8 @@ public:
     std::string GetSubject() const;
     
     std::string GetNotes() const;
+    
+    friend class Parse;
 
 };
 
