@@ -86,12 +86,18 @@ private:
     //Boolean logic to determine if do-while loop is valid
     bool isValid;
     
+    // Declare ifstream variable
+    std::ifstream read;
+    
     // Contains all library records containing keyword
     // Prints results in the following order: book.txt, film.txt. periodic.txt and video.txt
     std::vector <Media*> Library_Records;
     
-    // Declare SEARCH_TYPE enum
-    SEARCH_TYPE searchEnum;
+    // Declare SEARCH_TYPE variable as class member
+    SEARCH_TYPE search;
+    
+    // Declare MEDIA_TYPE variable as class member
+    MEDIA_TYPE media;
     
     // Declare media object
     Media * m;
@@ -114,7 +120,7 @@ public:
     void Router();
 
     // Executes logic
-    void Controller(SEARCH_TYPE search);
+    void Controller();
 
     // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt
     void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * & m, std::vector <Media *> Library_Records, incrementer fileIncrementer, const std::string keyword);

@@ -113,13 +113,16 @@ void Parse :: Router()
     std::cin >> selection;
     
     // Implement controller
-    Controller(searchType(selection));
+    Controller();
 }
 
 // -------------------------------------------------------------------------------------------
 // Executes logic
-void Parse :: Controller(SEARCH_TYPE search)
+void Parse :: Controller()
 {
+    // Assign value to search enum
+    this -> search = searchType(selection);
+    
     // If user selects to exit program, or if exception is encountered
     switch(search)
     {
@@ -145,7 +148,7 @@ void Parse :: Controller(SEARCH_TYPE search)
     for(iterator index = 0; index < sizeof(fileName) / sizeof(fileName[0]); index++)
     {
         // Read file
-        std::ifstream read(fileName[index]);
+       read.open(fileName[index]);
         
         if(read.is_open())
             Read_Media(read, search, mediaType(fileName[index]), m, Library_Records, index, keyword);
@@ -1433,7 +1436,7 @@ bool Parse :: keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fi
 // Print records
 void Parse :: Print()
 {
-    m -> Print(this -> searchEnum, this -> Library_Records);
+    m -> Print(this -> search, this -> Library_Records);
 }
 
 // -------------------------------------------------------------------------------------------
@@ -1441,24 +1444,24 @@ void Parse :: Print()
 SEARCH_TYPE Parse :: searchType(int selection)
 {
     if(selection == 1)
-        this -> searchEnum = SEARCH_TYPE :: CALL_NUMBER;
+        this -> search = SEARCH_TYPE :: CALL_NUMBER;
     
     else if(selection == 2)
-        this -> searchEnum = TITLE;
+        this -> search = TITLE;
     
     else if(selection == 3)
-        this -> searchEnum = SEARCH_TYPE :: SUBJECT;
+        this -> search = SEARCH_TYPE :: SUBJECT;
     
     else if(selection == 4)
-        this -> searchEnum = SEARCH_TYPE :: OTHER;
+        this -> search = SEARCH_TYPE :: OTHER;
     
     else if(selection == 5)
-        this -> searchEnum = SEARCH_TYPE :: EXIT;
+        this -> search = SEARCH_TYPE :: EXIT;
     
     else
-        this -> searchEnum = SEARCH_TYPE :: SEARCH_TYPE_ERROR;
+        this -> search = SEARCH_TYPE :: SEARCH_TYPE_ERROR;
     
-    return this -> searchEnum;
+    return this -> search;
     
 }
 
