@@ -121,7 +121,7 @@ void Parse :: Router()
 void Parse :: Controller()
 {
     // Assign value to search enum
-    this -> search = searchType(selection);
+    searchType(selection);
     
     // If user selects to exit program, or if exception is encountered
     switch(search)
@@ -139,7 +139,7 @@ void Parse :: Controller()
     
     // Prompt user for selection
     std::cout << "Search keyword: ";
-    std::cin >> keyword;
+    std::cin >> this -> keyword;
     
     // Store file name in array
     const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
@@ -150,8 +150,10 @@ void Parse :: Controller()
         // Read file
        read.open(fileName[index]);
         
+       mediaType(fileName[index]);
+        
         if(read.is_open())
-            Read_Media(read, search, mediaType(fileName[index]), m, Library_Records, index, keyword);
+            Read_Media();
         
         else
             throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
@@ -160,7 +162,7 @@ void Parse :: Controller()
 
 // -------------------------------------------------------------------------------------------
 // Criteria is extracted from each Media Type: book.txt, film.txt, periodic.txt, video.txt
-void Parse :: Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * &m, std::vector<Media*> Library_Records, incrementer fileIncrementer, const std::string keyword)
+void Parse :: Read_Media()
 {
     // Extract field from each record
     std::string field = "";
@@ -176,7 +178,7 @@ void Parse :: Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE med
     {
         // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt based on search type
         if(isRecord(read, fieldPackage, media, character, field, countIndex))
-            if(keyWordFound(search, media, fieldPackage, m, keyword, countIndex))
+            if(keyWordFound(fieldPackage, m, countIndex))
                 Library_Records.push_back(m);
 
     }
@@ -1167,7 +1169,7 @@ bool Parse :: isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TY
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-bool Parse :: keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, const std::string keyword, incrementer &countIndex)
+bool Parse :: keyWordFound(FieldStruct &fieldPackage, Media * &m, incrementer &countIndex)
 {
     // Update counter variable
     countIndex = 0;
@@ -1441,7 +1443,7 @@ void Parse :: Print()
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-SEARCH_TYPE Parse :: searchType(int selection)
+void Parse :: searchType(int selection)
 {
     if(selection == 1)
         this -> search = SEARCH_TYPE :: CALL_NUMBER;
@@ -1461,28 +1463,26 @@ SEARCH_TYPE Parse :: searchType(int selection)
     else
         this -> search = SEARCH_TYPE :: SEARCH_TYPE_ERROR;
     
-    return this -> search;
-    
 }
 
 // -------------------------------------------------------------------------------------------
 // Determine selected field through MEDIA_TYPE enum
-MEDIA_TYPE Parse :: mediaType(const std::string fileName)
+void Parse :: mediaType(const std::string fileName)
 {
     if(fileName == "book.txt")
-        return MEDIA_TYPE :: BOOK;
+        media = MEDIA_TYPE :: BOOK;
     
-    
-    if(fileName == "periodic.txt")
-        return MEDIA_TYPE :: PERIODICAL;
+    else if(fileName == "periodic.txt")
+        media = MEDIA_TYPE :: PERIODICAL;
     
     else if(fileName == "film.txt")
-        return MEDIA_TYPE :: FILM;
+        media = MEDIA_TYPE :: FILM;
     
-    if(fileName == "video.txt")
-        return MEDIA_TYPE :: VIDEO;
+    else if(fileName == "video.txt")
+        media = MEDIA_TYPE :: VIDEO;
     
-    return MEDIA_TYPE :: MEDIA_TYPE_ERROR;
+    else
+        media = MEDIA_TYPE :: MEDIA_TYPE_ERROR;
     
 }
 

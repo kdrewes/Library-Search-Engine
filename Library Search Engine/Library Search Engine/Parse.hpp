@@ -123,7 +123,7 @@ public:
     void Controller();
 
     // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt
-    void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * & m, std::vector <Media *> Library_Records, incrementer fileIncrementer, const std::string keyword);
+    void Read_Media();
     
     // End application
     void End();
@@ -138,13 +138,13 @@ public:
     bool isRecord(std::ifstream &read, FieldStruct &fieldPackage, MEDIA_TYPE media, char character, std::string &field, incrementer & countIndex);
 
     // Determine if key word is detected in record
-    bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, const std::string keyword, incrementer &countIndex);
+    bool keyWordFound(FieldStruct &fieldPackage, Media * &m, incrementer &countIndex);
 
     // Determine label utilized through SEARCH_TYPE enum
-    SEARCH_TYPE searchType(int selection);
+    void searchType(int selection);
 
     // Determine label utilized through MEDIA_TYPE enum
-    MEDIA_TYPE mediaType(const std::string fileName);
+    void mediaType(const std::string fileName);
 
     // Determine label utilized through FIELD_TYPE enum
     FIELD_TYPE fieldType(const std::string fieldName);
