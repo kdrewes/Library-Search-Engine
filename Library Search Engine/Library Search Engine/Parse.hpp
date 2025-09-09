@@ -188,8 +188,6 @@ public:
     
     // Output object
     friend std::ostream & operator << (std::ostream &, Parse &);
-
-    
 };
 
 #include <stdio.h>
