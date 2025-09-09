@@ -41,7 +41,6 @@
 #include "Video.hpp"
 #include "Enum.hpp"
 
-
 // -------------------------------------------------------------------------------------------
 
 int main(int argc, const char * argv[])
