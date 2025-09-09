@@ -1,157 +1,64 @@
 /*
-*************************************************************************
- Title: Library Design
-                                                                        
- Author: Kyle Drewes
-                    
- Date: 9/5/2025
  
- Description: This program is designed to implement a library search
- engine.  The user has the ability to select from four different
- searches:
+ *************************************************************************
+  
+  Title: Library Design
+                                                                         
+  Author: Kyle Drewes
+                     
+  Date: 9/8/2025
+  
+  Description: This program is designed to implement a library search
+  engine.  The user has the ability to select from four different
+  searches:
+  
+  • Call number
+  • Title
+  • Subject
+  • Other
+  
+  The search engine will traverse through the following media types:
+  
+  • Book
+  • Periodical
+  • Film
+  • Video
+  
+  and retreive the user's desired results.  For further questions
+  please view instructions.  Thank you.
+  
+  *********************************************************************
  
- • Call number
- • Title
- • Subject
- • Other
- 
- The search engine will traverse through the following media types:
- 
- • Book
- • Periodical
- • Film
- • Video
- 
- and retreive the user's desired results.  For further questions
- please view instructions.  Thank you.
- 
- *********************************************************************
  */
 
-#include <iostream>
-#include <vector>
-#include <sstream>
 #include <fstream>
+#include <sstream>
+#include "Parse.hpp"
 #include "Media.hpp"
 #include "Book.hpp"
 #include "Periodical.hpp"
 #include "Film.hpp"
 #include "Video.hpp"
-#include "Enum.hpp"
 
-// ------------------------------ Structures -----------------------------
-
-// Struct containing all field elements of book, periodicals, film & video
-struct FieldStruct
+Parse :: Parse()
 {
-    // Declare main field elements
-    std::string callNumber,
-    notes,
-    subject,
-    title,
+    keyword = "";
     
-    // Declare additional field elements
-    author,
-    city,
-    description,
-    director,
-    distibutor,
-    gov_doc_number,
-    label,
-    other_forms_of_titles,
-    publisher,
-    publishing_history,
-    related_titles,
-    series,
-    year;
+    field = "";
     
-    // Key = field type, value = field
-    std::pair<std::string, std::string> other;
+    selection = 0;
     
+    countIndex = 0;
     
-    // ------- Miscellaneous criteria -------
+    bool isValid = false;
     
-    // Key word inputted by user
-    std::string keyword;
-    
-    // Determines if vertical bar has been detected
-    bool isVerticalBar = false;
-    
-    // Determines switch statement should be skipped
-    bool skipSwitchStatement = false;
-    
-    // Count # of matches detected in keyword
-    int countMatches = 0,
-    
-    // Count spaces to see if record has ended
-    countSpaces = 0;
-    
-} fieldPackage;
-
-
-// --------------------- Typedef ---------------------
-
-// input = User input used to select menu options
-
-// iterator = Used to traverse through data sets
-
-// increment = Used as counter
-
-typedef int input, iterator, incrementer;
-
-// --------------------- Prototypes ---------------------
-
-// Displays header of application
-void Header();
-
-// Specifies the type of search user wishes to select
-void Menu();
-
-// Implements configurations
-void Router();
-
-// Executes logic
-void Controller(SEARCH_TYPE search);
-
-// Search for call number of media type
-void Call_Number(std::string keyword);
-
-// Search for subject of media type
-void Subject(std::string keyword);
-
-// Search for title of media type
-void Title(std::string keyword);
-
-// Search for other media type
-void Other(std::string key);
-
-// Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt
-void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * & m, std::vector<Media *> Library_Records, incrementer fileIncrementer, std::string keyword);
-
-// Input validation used to handle file discrepencies
-void Verify_Record(char character, FieldStruct & fieldPackage);
-
-// Determine if record is read.  Simultaneously, criteria is extracted when book.txt, film.txt, periodic,txt or video.txt is read
-bool isRecord(std::ifstream &read, FieldStruct &fieldPackage, MEDIA_TYPE media, char character, std::string &field, incrementer & countIndex);
-
-// Determine if key word is detected in record
-bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, std::string keyword, incrementer &countIndex);
-
-// Determine label utilized through SEARCH_TYPE enum
-SEARCH_TYPE searchType(int selection);
-
-// Determine label utilized through MEDIA_TYPE enum
-MEDIA_TYPE mediaType(std::string fileName);
-
-// Determine label utilized through FIELD_TYPE enum
-FIELD_TYPE fieldType(std::string fieldName);
+    Media * m = nullptr;
+}
 
 // -------------------------------------------------------------------------------------------
-
-int main(int argc, const char * argv[]) {
-    
-    //Boolean logic to determine if do-while loop is valid
-    bool isValid = false;
+// Initiate application
+void Parse :: Boot()
+{
     
     // Repeat any input errors made by user
     do
@@ -166,6 +73,7 @@ int main(int argc, const char * argv[]) {
         isValid = true;
     }
     
+    // Invalid argument which can still be corrected
     catch(std::invalid_argument exception)
     {
         std::cout << exception.what();
@@ -189,18 +97,23 @@ int main(int argc, const char * argv[]) {
     
     while(!isValid);
     
-    // Ending line
-    std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------";
-    
     // Extra spaces
     std::cout << std::endl << std::endl;
-    
-    return 0;
 }
 
 // -------------------------------------------------------------------------------------------
+// Reset variables
+void Parse :: Clear()
+{
+    // Clear Library Records dataset
+    Library_Records.clear();
+
+    // Close file
+    read.close();
+}
+// -------------------------------------------------------------------------------------------
 // Displays header of application
-void Header()
+void Parse :: Header()
 {
     // Determine if header was already displayed
     static bool isHeader = true;
@@ -217,7 +130,7 @@ void Header()
 
 // -------------------------------------------------------------------------------------------
 // Specifies the type of search user wishes to select
-void Menu()
+void Parse :: Menu()
 {
     
     std::cout << "\t1) Call Number\t\t2) Title\n\n\t3) Subject\t\t\t4) Other\n\n\t5) Exit\n\n";
@@ -227,28 +140,30 @@ void Menu()
 
 // -------------------------------------------------------------------------------------------
 // Implements configurations
-void Router()
+void Parse :: Router()
 {
+    // Display header
     Header();
     
+    // Display menu
     Menu();
-    
-    // Used to select option from menu
-    input selection;
     
     // Prompt user for selection
     std::cout << "Select: ";
     std::cin >> selection;
     
-    // Implement controller function
-    Controller(searchType(selection));
+    // Implement controller
+    Controller();
 }
 
 // -------------------------------------------------------------------------------------------
 // Executes logic
-void Controller(SEARCH_TYPE search)
+void Parse :: Controller()
 {
-    // If user selects to exit program
+    // Assign value to search enum
+    searchType(selection);
+    
+    // If user selects to exit program, or if exception is encountered
     switch(search)
     {
         case EXIT:
@@ -258,79 +173,57 @@ void Controller(SEARCH_TYPE search)
         case SEARCH_TYPE_ERROR:
             throw std::invalid_argument("\n\nError - invalid option\n\nPlease re-enter below:\n\n");
             
-    }
+}
     // Add spacer
     std::cout << "\n-----------------------------------------\n\n";
     
-    // Declare keyword variable
-    std::string keyword;
-    
     // Prompt user for selection
     std::cout << "Search keyword: ";
-    std::cin >> keyword;
+    std::cin >> this -> keyword;
     
     // Store file name in array
     const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
-    
-    // Declare media object
-    Media * m = nullptr;
-    
-    // Contains all library records containing keyword
-    // Prints results in the following order: book.txt, film.txt. periodic.txt and video.txt
-    std::vector <Media*> Library_Records;
     
     // Traverse through fileName dataset
     for(iterator index = 0; index < sizeof(fileName) / sizeof(fileName[0]); index++)
     {
         // Read file
-        std::ifstream read(fileName[index]);
+       read.open(fileName[index]);
+        
+       // Assign value to media enum
+       mediaType(fileName[index]);
         
         if(read.is_open())
-            Read_Media(read, search, mediaType(fileName[index]), m, Library_Records, index, keyword);
+            Read_Media();
         
         else
             throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
+        
+        // Print records for each media type
+        m -> Print (search,Library_Records);
+        
+        Clear();
     }
 }
 
 // -------------------------------------------------------------------------------------------
 // Criteria is extracted from each Media Type: book.txt, film.txt, periodic.txt, video.txt
-void Read_Media(std::ifstream &read, SEARCH_TYPE search, MEDIA_TYPE media, Media * &m, std::vector<Media*> Library_Records, incrementer fileIncrementer, std::string keyword)
+void Parse :: Read_Media()
 {
-    // Extract field from each record
-    std::string field = "";
-    
-    // Counter used to keep track of field indices in record demonstrated below:
-    
-    // Call Number, Title, Subjects, Author, Description, Publisher, City, Year, Series, Notes
-    // |    0     |   1   |    2   |   3   |      4     |     5    |   6  |  7  |   8  |   9  |
-    incrementer countIndex = 0;
-    
-    std::string testString = "";
-    
     // Traverse through file
     for(char character = ' '; !read.eof(); read.get(character))
     {
         // Criteria is extracted from: book.txt, film.txt, periodic.txt and video.txt based on search type
-        if(isRecord(read, fieldPackage, media, character, field, countIndex))
-            if(keyWordFound(search, media, fieldPackage, m, keyword, countIndex))
+        if(isRecord(character))
+            if(keyWordFound())
                 Library_Records.push_back(m);
 
     }
-    
-    // Print records for each media type
-    m -> Print (search,Library_Records);
-    
-    // Clear file
-    Library_Records.clear();
-
-    // Close file
-    read.close();
 }
 
 // -------------------------------------------------------------------------------------------
 // Input validation used to handle file discrepancies
-void Verify_Record(char character, FieldStruct & fieldPackage)
+void Parse :: Verify_Record(char character, Parse :: FieldStruct & fieldPackage)
 {
     if (character == '|')
         fieldPackage.isVerticalBar = true;
@@ -356,7 +249,7 @@ void Verify_Record(char character, FieldStruct & fieldPackage)
 
 // -------------------------------------------------------------------------------------------
 // Determine if full record is read.  Simultaneously, criteria is extracted when book.txt, film.txt, periodic,txt or video.txt is read
-bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media, char character, std::string & field, incrementer & countIndex)
+bool Parse :: isRecord(char character)
 {
     switch(media)
     {
@@ -394,9 +287,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.callNumber = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.callNumber = field;
@@ -411,9 +305,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.title = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.title = field;
@@ -431,9 +326,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.subject = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.subject = field;
@@ -450,9 +346,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.author = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.author = field;
@@ -471,9 +368,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.description = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.description = field;
@@ -492,9 +390,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.distibutor = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.distibutor = field;
@@ -513,9 +412,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.publisher = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.publisher = field;
@@ -523,6 +423,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else
                             field += character;
                         
@@ -533,9 +434,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.city = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.city = field;
@@ -543,7 +445,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             field = "";
                             return true;
                         }
-                        else field += character;
+                        
+                        else
+                            field += character;
+                        
                         return false;
                         
                     case YEAR_FIELD:
@@ -551,9 +456,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.year = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.year = field;
@@ -572,9 +478,10 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                         if (character == '|')
                         {
                             fieldPackage.series = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else if (character == '\n')
                         {
                             fieldPackage.series = field;
@@ -582,12 +489,14 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else
                             field += character;
                         
                         return false;
                         
                     case NOTES_FIELD:
+                        
                         if (character == '\n' || read.peek() == '\n')
                         {
                             fieldPackage.notes = field;
@@ -597,12 +506,14 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
                             
                             return true;
                         }
+                        
                         else if (character == '|')
                         {
                             fieldPackage.notes = field;
-                            countIndex++;
+                            countIndex += 1;
                             field = "";
                         }
+                        
                         else
                             field += character;
                         
@@ -1286,7 +1197,7 @@ bool isRecord(std::ifstream &read, FieldStruct & fieldPackage, MEDIA_TYPE media,
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackage, Media * &m, std::string keyword, incrementer &countIndex)
+bool Parse :: keyWordFound()
 {
     // Update counter variable
     countIndex = 0;
@@ -1553,52 +1464,52 @@ bool keyWordFound(SEARCH_TYPE search, MEDIA_TYPE media, FieldStruct &fieldPackag
 
 // -------------------------------------------------------------------------------------------
 // Determine option through SEARCH_TYPE enum
-SEARCH_TYPE searchType(int selection)
+void Parse :: searchType(int selection)
 {
     if(selection == 1)
-        return SEARCH_TYPE :: CALL_NUMBER;
+        this -> search = SEARCH_TYPE :: CALL_NUMBER;
     
     else if(selection == 2)
-        return SEARCH_TYPE :: TITLE;
+        this -> search = TITLE;
     
     else if(selection == 3)
-        return SEARCH_TYPE :: SUBJECT;
+        this -> search = SEARCH_TYPE :: SUBJECT;
     
     else if(selection == 4)
-        return SEARCH_TYPE :: OTHER;
+        this -> search = SEARCH_TYPE :: OTHER;
     
     else if(selection == 5)
-        return SEARCH_TYPE :: EXIT;
+        this -> search = SEARCH_TYPE :: EXIT;
     
     else
-        return SEARCH_TYPE :: SEARCH_TYPE_ERROR;
+        this -> search = SEARCH_TYPE :: SEARCH_TYPE_ERROR;
     
 }
 
 // -------------------------------------------------------------------------------------------
 // Determine selected field through MEDIA_TYPE enum
-MEDIA_TYPE mediaType(std::string fileName)
+void Parse :: mediaType(const std::string fileName)
 {
     if(fileName == "book.txt")
-        return MEDIA_TYPE :: BOOK;
+        media = MEDIA_TYPE :: BOOK;
     
-    
-    if(fileName == "periodic.txt")
-        return MEDIA_TYPE :: PERIODICAL;
+    else if(fileName == "periodic.txt")
+        media = MEDIA_TYPE :: PERIODICAL;
     
     else if(fileName == "film.txt")
-        return MEDIA_TYPE :: FILM;
+        media = MEDIA_TYPE :: FILM;
     
-    if(fileName == "video.txt")
-        return MEDIA_TYPE :: VIDEO;
+    else if(fileName == "video.txt")
+        media = MEDIA_TYPE :: VIDEO;
     
-    return MEDIA_TYPE :: MEDIA_TYPE_ERROR;
+    else
+        media = MEDIA_TYPE :: MEDIA_TYPE_ERROR;
     
 }
 
 // -------------------------------------------------------------------------------------------
 // Determine label utilized through FIELD_TYPE enum
-FIELD_TYPE fieldType(std::string fieldName)
+FIELD_TYPE Parse :: fieldType(const std::string fieldName)
 {
     // const std::string fieldName [] = {"call number", "title", "subject", "author", "description", "pubilsher", "city", "year", "series", "notes"};
     
@@ -1656,4 +1567,11 @@ FIELD_TYPE fieldType(std::string fieldName)
     return FIELD_TYPE_ERROR;
 }
 // -------------------------------------------------------------------------------------------
-
+std::ostream & operator << (std::ostream &output, Parse &parser)
+{
+    parser.Boot();
+    
+    return output;
+    
+}
+// -------------------------------------------------------------------------------------------

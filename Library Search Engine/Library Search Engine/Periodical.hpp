@@ -1,31 +1,32 @@
 /*
-*************************************************************************
- Title: Library Design
-                                                                        
- Author: Kyle Drewes
-                    
- Date: 9/5/2025
- 
- Description: This program is designed to implement a library search
- engine.  The user has the ability to select from four different
- searches:
- 
- • Call number
- • Title
- • Subject
- • Other
- 
- The search engine will traverse through the following media types:
- 
- • Book
- • Periodical
- • Film
- • Video
- 
- and retreive the user's desired results.  For further questions
- please view instructions.  Thank you.
- 
- *********************************************************************
+ *************************************************************************
+  
+  Title: Library Design
+                                                                         
+  Author: Kyle Drewes
+                     
+  Date: 9/8/2025
+  
+  Description: This program is designed to implement a library search
+  engine.  The user has the ability to select from four different
+  searches:
+  
+  • Call number
+  • Title
+  • Subject
+  • Other
+  
+  The search engine will traverse through the following media types:
+  
+  • Book
+  • Periodical
+  • Film
+  • Video
+  
+  and retreive the user's desired results.  For further questions
+  please view instructions.  Thank you.
+  
+  *********************************************************************
  */
 
 #ifndef Periodical_hpp
@@ -51,14 +52,15 @@ std::string author,
             related_titles,
             other_forms_of_title,
             govt_doc_number;
-      
  
 public:
     
     // Paramaterized constructor
-    Periodical(std::string callNumber, std::string title, std::string subject, std::string author, std::string description,
-               std::string publisher, std::string publishing_history, std::string series, std::string notes, std::string related_titles,
-               std::string other_forms_of_titles, std::string gov_doc_number );
+    Periodical(const std::string callNumber,            const std::string title,              const std::string subject, const std::string author, const std::string description,
+               
+               const std::string publisher,             const std::string publishing_history, const std::string series,  const std::string notes,  const std::string related_titles,
+               
+               const std::string other_forms_of_titles, const std::string gov_doc_number );
     
     // Determine if keyword is present in description, notes, series and related titles
     bool Contains_Other(std::string other) override;
@@ -95,6 +97,8 @@ public:
     std::string GetDistributor() const override;
     
     std::string GetNotes() const;
+    
+    friend class Parse;
     
 };
 

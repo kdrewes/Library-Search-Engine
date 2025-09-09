@@ -1,10 +1,11 @@
 /*
 *************************************************************************
+ 
  Title: Library Design
                                                                         
  Author: Kyle Drewes
                     
- Date: 9/5/2025
+ Date: 9/8/2025
  
  Description: This program is designed to implement a library search
  engine.  The user has the ability to select from four different
@@ -34,9 +35,11 @@
 //--------------------------------------------------------------------------------
 
 // Paramaterized constructor
-Periodical :: Periodical(std::string cn, std::string t, std::string sub, std::string auth, std::string desc,
-            std::string pub, std::string pubHistory, std::string ser, std::string notes, std::string rt,
-            std::string ofot, std::string gdn )
+Periodical :: Periodical(const std::string cn,    const std::string t,          const std::string sub, const std::string auth,  const std::string desc,
+                         
+                         const std::string pub,   const std::string pubHistory, const std::string ser, const std::string notes, const std::string rt,
+                         
+                         const  std::string ofot, const std::string gdn )
 
             : Media(cn, t, sub, notes),
 

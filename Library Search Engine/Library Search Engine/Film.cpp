@@ -1,10 +1,11 @@
 /*
 *************************************************************************
+ 
  Title: Library Design
                                                                         
  Author: Kyle Drewes
                     
- Date: 9/5/2025
+ Date: 9/8/2025
  
  Description: This program is designed to implement a library search
  engine.  The user has the ability to select from four different
@@ -28,39 +29,33 @@
  *********************************************************************
  */
 
-#include "Media.hpp"
-#include "Book.hpp"
-#include <vector>
+#include "Film.hpp"
 
 // ----------------------------------------------------------------------------------------------------
 
-// Paramaterized Constructor
-Book :: Book (std::string callNumber, std::string title, std::string subject, std::string auth, std::string desc,
-              std::string pub,  std::string cty,  std::string yr, std::string ser, std::string notes)
-
-: Media(callNumber, title, subject, notes),
-
-  author(auth), description(desc), publisher(pub), city(cty), year(yr), series(ser) {}
+// Paramaterized constructor
+Film :: Film(const std::string cn, const std::string t, const std::string sub, const std::string dir, const std::string nts, const std::string yr)
+: Media(cn, t, sub, nts),
+director(dir), year(yr), notes(nts) {}
 
 // ----------------------------------------------------------------------------------------------------
-// Determine if keyword is present in description, notes and year
-bool Book :: Contains_Other(std::string keyword)
+// Determine if keyword is present in notes, director and year
+bool Film :: Contains_Other(const std::string keyword)
 {
-    if(description.find(keyword) != std::string::npos)
-        return true;
-    
     if(notes.find(keyword) != std::string::npos)
         return true;
     
     if(year.find(keyword) != std::string::npos)
         return true;
     
+    if(notes.find(keyword) != std::string::npos)
+        return true;
+    
     return false;
 }
-
 // ----------------------------------------------------------------------------------------------------
-// Print criteria from book record(s)
-void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
+// Print criteria from film record(s)
+void Film :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
 {
     switch(search)
     {
@@ -68,7 +63,7 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
         {
             if(!Library_Records.empty())
             {
-                std::cout << "\n---------------------------------------------------------------------- Book ----------------------------------------------------------------------\n\n";
+                std::cout << "\n---------------------------------------------------------------------- Film ----------------------------------------------------------------------\n\n";
                 
                 for(std::vector<Media*> :: size_type i = 0; i < Library_Records.size(); i++)
                 {
@@ -78,19 +73,11 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
                     
                     std::cout << "Subject: " << Library_Records[i] -> GetSubject() << "\n";
                     
-                    std::cout << "Author: " << Library_Records[i] -> GetAuthor() << "\n";
+                    std::cout << "Director: " << Library_Records[i] -> GetDirector() << "\n";
                     
-                    std::cout << "Description: " << Library_Records[i] -> GetDescription() << "\n";
+                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n";
                     
-                    std::cout << "Distributor: " << Library_Records[i] -> GetDistributor() << "\n";
-                    
-                    std::cout << "Publisher: " << Library_Records[i] -> GetPublisher() << "\n";
-                    
-                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n";
-                    
-                    std::cout << "Series: " << Library_Records[i] -> GetSeries() << "\n";
-                    
-                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n\n";
+                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n\n";
                     
                     if(i != Library_Records.size() - 1)
                        std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------\n\n";
@@ -104,7 +91,7 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
         {
             if(!Library_Records.empty())
             {
-                std::cout << "\n---------------------------------------------------------------------- Book ----------------------------------------------------------------------\n\n";
+                std::cout << "\n---------------------------------------------------------------------- Film ----------------------------------------------------------------------\n\n";
                 
                 for(std::vector<Media*> :: size_type i = 0; i < Library_Records.size(); i++)
                 {
@@ -114,19 +101,11 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
                     
                     std::cout << "Subject: " << Library_Records[i] -> GetSubject() << "\n";
                     
-                    std::cout << "Author: " << Library_Records[i] -> GetAuthor() << "\n";
+                    std::cout << "Director: " << Library_Records[i] -> GetDirector() << "\n";
                     
-                    std::cout << "Description: " << Library_Records[i] -> GetDescription() << "\n";
+                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n";
                     
-                    std::cout << "Distributor: " << Library_Records[i] -> GetDistributor() << "\n";
-                    
-                    std::cout << "Publisher: " << Library_Records[i] -> GetPublisher() << "\n";
-                    
-                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n";
-                    
-                    std::cout << "Series: " << Library_Records[i] -> GetSeries() << "\n";
-                    
-                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n\n";
+                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n\n";
                     
                     if(i != Library_Records.size() - 1)
                        std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------\n\n";
@@ -140,7 +119,7 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
         {
             if(!Library_Records.empty())
             {
-                std::cout << "\n---------------------------------------------------------------------- Book ----------------------------------------------------------------------\n\n";
+                std::cout << "\n---------------------------------------------------------------------- Film ----------------------------------------------------------------------\n\n";
                 
                 for(std::vector<Media*> :: size_type i = 0; i < Library_Records.size(); i++)
                 {
@@ -150,25 +129,16 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
                     
                     std::cout << "Title: " << Library_Records[i] -> GetTitle() << "\n";
                     
-                    std::cout << "Author: " << Library_Records[i] -> GetAuthor() << "\n";
+                    std::cout << "Director: " << Library_Records[i] -> GetDirector() << "\n";
                     
-                    std::cout << "Description: " << Library_Records[i] -> GetDescription() << "\n";
+                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n";
                     
-                    std::cout << "Distributor: " << Library_Records[i] -> GetDistributor() << "\n";
-                    
-                    std::cout << "Publisher: " << Library_Records[i] -> GetPublisher() << "\n";
-                    
-                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n";
-                    
-                    std::cout << "Series: " << Library_Records[i] -> GetSeries() << "\n";
-                    
-                    std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n\n";
+                    std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n\n";
                     
                     if(i != Library_Records.size() - 1)
                        std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------\n\n";
                 }
             }
-
             
             break;
         }
@@ -177,13 +147,13 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
         {
             if(!Library_Records.empty())
             {
-                std::cout << "\n---------------------------------------------------------------------- Book ----------------------------------------------------------------------\n\n";
+                std::cout << "\n---------------------------------------------------------------------- Film ----------------------------------------------------------------------\n\n";
                 
                 for(std::vector<Media*> :: size_type i = 0; i < Library_Records.size(); i++)
                 {
-                    std::cout << "Description: " << Library_Records[i] -> GetDescription() << "\n";
-                    
                     std::cout << "Notes: " << Library_Records[i] -> GetNotes() << "\n";
+                    
+                    std::cout << "Director: " << Library_Records[i] -> GetDirector() << "\n";
                     
                     std::cout << "Year: " << Library_Records[i] -> GetYear() << "\n";
                     
@@ -191,16 +161,7 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
                     
                     std::cout << "Title: " << Library_Records[i] -> GetTitle() << "\n";
                     
-                    std::cout << "Subject: " << Library_Records[i] -> GetSubject() << "\n";
-                    
-                    std::cout << "Author: " << Library_Records[i] -> GetAuthor() << "\n";
-                    
-                    std::cout << "Distributor: " << Library_Records[i] -> GetDistributor() << "\n";
-                    
-                    std::cout << "Publisher: " << Library_Records[i] -> GetPublisher() << "\n";
-                    
-                    std::cout << "Series: " << Library_Records[i] -> GetSeries() << "\n\n";
-                    
+                    std::cout << "Subject: " << Library_Records[i] -> GetSubject() << "\n\n";
                     
                     if(i != Library_Records.size() - 1)
                        std::cout << "----------------------------------------------------------------------------------------------------------------------------------------------------------\n\n";
@@ -215,72 +176,71 @@ void Book :: Print(SEARCH_TYPE search, std::vector<Media*> Library_Records)
 
 //----------------------------- Accessor Functions -----------------------------
 
-std::string Book :: GetAuthor() const
-{
-    return author;
-}
-
-std::string Book :: GetDescription() const
-{
-    return description;
-}
-
-std::string Book :: GetPublisher() const
-{
-    return publisher;
-}
-
-std::string Book :: GetCity() const
-{
-    return city;
-}
-
-std::string Book :: GetYear() const
+std::string Film :: GetYear() const
 {
     return year;
 }
 
-std::string Book :: GetSeries() const
+std::string Film :: GetDirector() const
 {
-    return series;
+    return director;
 }
 
-std::string Book :: GetNotes() const
-{
-    return notes;
-}
-
-std::string Book :: GetDirector() const
+std::string Film :: GetAuthor() const
 {
     return "";
 }
 
-std::string Book :: GetPublishingHistory() const
+std::string Film :: GetDescription() const
 {
     return "";
 }
 
-std::string Book :: Get_Related_Titles() const
+std::string Film :: GetPublisher() const
 {
     return "";
 }
 
-std::string Book :: Other_Forms_Of_Titles() const
+std::string Film :: GetCity() const
 {
     return "";
 }
 
-std::string Book :: Get_Govt_Doc_Number() const
+std::string Film :: GetSeries() const
 {
     return "";
 }
 
-std::string Book :: GetLabel() const
+std::string Film :: GetNotes() const
 {
     return "";
 }
 
-std::string Book :: GetDistributor() const
+std::string Film :: GetPublishingHistory() const
+{
+    return "";
+}
+std::string Film :: Get_Related_Titles() const
+{
+    return "";
+}
+
+std::string Film :: Other_Forms_Of_Titles() const
+{
+    return "";
+}
+
+std::string Film :: Get_Govt_Doc_Number() const
+{
+    return "";
+}
+
+std::string Film :: GetLabel() const
+{
+    return "";
+}
+
+std::string Film :: GetDistributor() const
 {
     return "";
 }

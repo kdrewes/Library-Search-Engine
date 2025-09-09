@@ -1,10 +1,11 @@
 /*
 *************************************************************************
+ 
  Title: Library Design
                                                                         
  Author: Kyle Drewes
                     
- Date: 9/5/2025
+ Date: 9/8/2025
  
  Description: This program is designed to implement a library search
  engine.  The user has the ability to select from four different
@@ -28,8 +29,8 @@
  *********************************************************************
  */
 
-#ifndef Film_hpp
-#define Film_hpp
+#ifndef Book_hpp
+#define Book_hpp
 
 #include <stdio.h>
 #include <iostream>
@@ -37,33 +38,40 @@
 
 typedef std::string field;
 
-class Film : public Media
+class Book : public Media
 {
+    
 private:
 
-// Film criteria
-field director,
+// Book criteria
+field author,
+      description,
+      publisher,
+      city,
       year,
+      series,
       notes;
 
 public:
     
     // Paramaterized constructor
-    Film(std::string callNumber, std::string title, std::string subject, std::string director, std::string notes, std::string year);
+    Book(const std::string callNumber, const std::string title, const std::string subject, const std::string author, const std::string description,
+         
+         const std::string publisher,  const std::string city,  const std::string year,    const std::string series, const std::string notes);
     
-    // Determine if keyword is present in notes, director and year
-    bool Contains_Other(std::string other) override;
+    // Determine if keyword is present in description, notes and year
+    bool Contains_Other(const std::string other) override;
     
-    // Print criteria from film record(s)
+    // Print criteria from book record(s)
     void Print(SEARCH_TYPE search, std::vector<Media*> Library_Records) override;
     
     //----------------------------- Accessor Functions -----------------------------
     
     std::string GetAuthor() const override;
     
-    std::string GetDirector() const override;
-    
     std::string GetDescription() const override;
+    
+    std::string GetDirector() const override;
     
     std::string GetPublisher() const override;
     
@@ -81,13 +89,14 @@ public:
     
     std::string GetSeries() const override;
     
-    std::string GetLabel() const override;
-    
     std::string GetDistributor() const override;
+    
+    std::string GetLabel() const override;
     
     std::string GetNotes() const;
     
+    friend class Parse;
+ 
 };
 
-
-#endif 
+#endif
