@@ -52,7 +52,6 @@ std::string author,
             related_titles,
             other_forms_of_title,
             govt_doc_number;
-      
  
 public:
     
