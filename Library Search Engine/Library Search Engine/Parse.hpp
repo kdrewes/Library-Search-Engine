@@ -147,7 +147,7 @@ public:
     // Default constructor;
     Parse();
     
-    // Load all media files once into memory
+    // Reads file for each media type and stores collected data into memory
     void Load_Library();
     
     // Initiate application

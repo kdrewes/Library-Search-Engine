@@ -56,7 +56,7 @@ Parse :: Parse()
 }
 
 // -------------------------------------------------------------------------------------------
-// Load and cache all media records once at startup
+// Reads file for each media type and stores collected data into memory
 void Parse :: Load_Library()
 {
     const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
@@ -1418,8 +1418,6 @@ bool Parse :: keyWordFound()
                     break;
                 }
                     
-                
-                    
                 case OTHER:
                 {
                     // Instantiate Book object
@@ -1680,8 +1678,7 @@ void Parse :: mediaType(const std::string fileName)
 // Determine label utilized through FIELD_TYPE enum
 FIELD_TYPE Parse :: fieldType(const std::string fieldName)
 {
-    // const std::string fieldName [] = {"call number", "title", "subject", "author", "description", "pubilsher", "city", "year", "series", "notes"};
-    
+
     if(fieldName == "call number")
         return CALL_NUMBER_FIELD;
     
