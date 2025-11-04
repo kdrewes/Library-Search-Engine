@@ -50,7 +50,9 @@ field director,
 public:
     
     // Paramaterized constructor
-    Film(const std::string callNumber, const std::string title, const std::string subject, const std::string director, const std::string notes, const std::string year);
+    Film(const std::string callNumber, const std::string title, const std::string subject,
+         
+         const std::string director, const std::string notes, const std::string year);
     
     // Determine if keyword is present in notes, director and year
     bool Contains_Other(const std::string other) override;

@@ -44,6 +44,7 @@ Periodical :: Periodical(const std::string cn,    const std::string t,          
             : Media(cn, t, sub, notes),
 
             author(auth), description(desc), publisher(pub), publishing_history(pubHistory),
+
             series(ser), related_titles(rt), other_forms_of_title(ofot), govt_doc_number(gdn) {}
 
 // ----------------------------------------------------------------------------------------------------

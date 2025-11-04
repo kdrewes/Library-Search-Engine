@@ -50,15 +50,100 @@ Parse :: Parse()
     
     countIndex = 0;
     
-    bool isValid = false;
+    this -> isValid = false;
     
-    Media * m = nullptr;
+    this -> m = nullptr;
+}
+
+// -------------------------------------------------------------------------------------------
+// Load and cache all media records once at startup
+void Parse :: Load_Library()
+{
+    const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
+    
+    for(iterator index = 0; index < sizeof(fileName) / sizeof(fileName[0]); index++)
+    {
+        read.open(fileName[index]);
+        
+        mediaType(fileName[index]);
+        
+        if(!read.is_open())
+            throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
+        
+        // Stream through the file; when a full record is parsed, instantiate and store
+        for(char character = ' '; !read.eof(); read.get(character))
+        {
+            if(isRecord(character))
+            {
+                // Build object for the just-parsed record based on current media
+                switch(media)
+                {
+                    case BOOK:
+                    {
+                        Media* b = new Book(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
+                                              fieldPackage.publisher, fieldPackage.city, fieldPackage.year, fieldPackage.series, fieldPackage.notes);
+                        
+                        BooksMemory.push_back(b);
+                        
+                        break;
+                    }
+                    case PERIODICAL:
+                    {
+                        Media* p = new Periodical(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
+                                                    fieldPackage.publisher, fieldPackage.publishing_history, fieldPackage.series, fieldPackage.notes,
+                                                    fieldPackage.related_titles, fieldPackage.other_forms_of_titles, fieldPackage.gov_doc_number);
+                        
+                        PeriodicalMemory.push_back(p);
+                        
+                        break;
+                    }
+                    case FILM:
+                    {
+                        Media* f = new Film(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.director, fieldPackage.notes, fieldPackage.year);
+                        
+                        FilmsMemory.push_back(f);
+                        
+                        break;
+                    }
+                    case VIDEO:
+                    {
+                        Media* v = new Video(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.description,
+                                               fieldPackage.distibutor, fieldPackage.notes, fieldPackage.series, fieldPackage.label);
+                        
+                        VideosMemory.push_back(v);
+                        
+                        break;
+                    }
+                    case MEDIA_TYPE_ERROR:
+                        throw std::runtime_error("\nError - media type not recognized while loading library\n\n");
+                }
+                
+                // Prepare for next record
+                countIndex = 0;
+                
+                field = "";
+            }
+        }
+        
+        // Close current file
+        read.close();
+    }
 }
 
 // -------------------------------------------------------------------------------------------
 // Initiate application
 void Parse :: Boot()
 {
+    // Load all media once at startup (outside of per-search loop)
+    try
+    {
+        Load_Library();
+    }
+    catch(std::exception &e)
+    {
+        std::cout << e.what();
+        exit(1);
+    }
     
     // Repeat any input errors made by user
     do
@@ -142,18 +227,34 @@ void Parse :: Menu()
 // Implements configurations
 void Parse :: Router()
 {
-    // Display header
-    Header();
+    // Allow user to repeat search
+    char select;
     
-    // Display menu
-    Menu();
-    
-    // Prompt user for selection
-    std::cout << "Select: ";
-    std::cin >> selection;
-    
-    // Implement controller
-    Controller();
+    do
+    {
+        // Display header
+        Header();
+        
+        // Display menu
+        Menu();
+        
+        // Prompt user for selection
+        std::cout << "Select: ";
+        std::cin >> selection;
+        
+        // Implement controller
+        Controller();
+        
+        std::cout << "Would you like to begin new search (Y/N) ? ";
+        std::cin >> select;
+        
+        if(select != std::tolower(select) == 'n' && std::tolower(select) == 'y')
+            throw std::invalid_argument("\n\nError - Invalid input\n\nPlease enter 'Y' or 'N'\n\n");
+        
+        else
+            std::cout << "\n-----------------------------------------\n\n";
+        
+    } while(std::tolower(select) == 'y');
 }
 
 // -------------------------------------------------------------------------------------------
@@ -179,31 +280,99 @@ void Parse :: Controller()
     
     // Prompt user for selection
     std::cout << "Search keyword: ";
+    
     std::cin >> this -> keyword;
     
-    // Store file name in array
-    const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
+    // Clear Library_Records if it's currently storing data
+    if(! Library_Records.empty())
+        Library_Records.clear();
     
-    // Traverse through fileName dataset
-    for(iterator index = 0; index < sizeof(fileName) / sizeof(fileName[0]); index++)
+    // Collect book data that matches search
+    for (Media* b : BooksMemory)
     {
-        // Read file
-       read.open(fileName[index]);
-        
-       // Assign value to media enum
-       mediaType(fileName[index]);
-        
-        if(read.is_open())
-            Read_Media();
-        
-        else
-            throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
-        
-        // Print records for each media type
-        m -> Print (search,Library_Records);
-        
-        Clear();
+        switch (search)
+        {
+            case CALL_NUMBER: if (b -> Contains_Call_Number(keyword)) Library_Records.push_back(b); break;
+                
+            case TITLE:       if (b -> Contains_Title(keyword))       Library_Records.push_back(b); break;
+                
+            case SUBJECT:     if (b -> Contains_Subject(keyword))     Library_Records.push_back(b); break;
+                
+            case OTHER:       if (b -> Contains_Other(keyword))       Library_Records.push_back(b); break;
+                
+            default: break;
+        }
     }
+    
+    if (!Library_Records.empty())
+        Library_Records[0]->Print(search, Library_Records);
+    
+   
+    Library_Records.clear();
+    
+    // Collect periodical data that matches search
+    for (Media* p : PeriodicalMemory)
+    {
+        switch (search)
+        {
+            case CALL_NUMBER: if (p -> Contains_Call_Number(keyword)) Library_Records.push_back(p); break;
+                
+            case TITLE:       if (p -> Contains_Title(keyword))       Library_Records.push_back(p); break;
+                
+            case SUBJECT:     if (p -> Contains_Subject(keyword))     Library_Records.push_back(p); break;
+                
+            case OTHER:       if (p -> Contains_Other(keyword))       Library_Records.push_back(p); break;
+                
+            default: break;
+        }
+    }
+    
+    if (!Library_Records.empty())
+        Library_Records[0]->Print(search, Library_Records);
+    
+    
+    Library_Records.clear();
+    
+    // Collect film data that matches search
+    for (Media* f : FilmsMemory)
+    {
+        switch (search)
+        {
+            case CALL_NUMBER: if (f -> Contains_Call_Number(keyword)) Library_Records.push_back(f); break;
+                
+            case TITLE:       if (f -> Contains_Title(keyword))       Library_Records.push_back(f); break;
+                
+            case SUBJECT:     if (f -> Contains_Subject(keyword))     Library_Records.push_back(f); break;
+                
+            case OTHER:       if (f -> Contains_Other(keyword))       Library_Records.push_back(f); break;
+                
+            default: break;
+        }
+    }
+    
+    if (!Library_Records.empty())
+        Library_Records[0]->Print(search, Library_Records);
+    
+    Library_Records.clear();
+    
+    // Collect video data that matches search
+    for (Media* v : VideosMemory)
+    {
+        switch (search)
+        {
+            case CALL_NUMBER: if (v -> Contains_Call_Number(keyword)) Library_Records.push_back(v); break;
+                
+            case TITLE:       if (v -> Contains_Title(keyword))       Library_Records.push_back(v); break;
+                
+            case SUBJECT:     if (v -> Contains_Subject(keyword))     Library_Records.push_back(v); break;
+                
+            case OTHER:       if (v -> Contains_Other(keyword))       Library_Records.push_back(v); break;
+                
+            default: break;
+        }
+    }
+    if (!Library_Records.empty())
+        Library_Records[0]->Print(search, Library_Records);
 }
 
 // -------------------------------------------------------------------------------------------
