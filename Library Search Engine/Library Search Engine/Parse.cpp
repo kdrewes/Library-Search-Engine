@@ -75,7 +75,7 @@ void Parse :: Load_Library()
         {
             if(isRecord(character))
             {
-                // Build object for the just-parsed record based on current media
+                // Collect file data and store memory for each media type
                 switch(media)
                 {
                     case BOOK:
