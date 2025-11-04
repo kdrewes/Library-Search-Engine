@@ -130,6 +130,9 @@ private:
     // Prints results in the following order: book.txt, film.txt. periodic.txt and video.txt
     std::vector <Media*> Library_Records;
     
+    // Stores memory of each media type once file is successfully read
+    std::vector<Media*> BooksMemory, PeriodicalMemory, FilmsMemory, VideosMemory;
+    
     // Declare SEARCH_TYPE variable as class member
     SEARCH_TYPE search;
     
@@ -143,6 +146,9 @@ public:
     
     // Default constructor;
     Parse();
+    
+    // Reads file for each media type and stores collected data into memory
+    void Load_Library();
     
     // Initiate application
     void Boot();
