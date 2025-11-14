@@ -70,7 +70,7 @@ void Parse :: Load_Library()
         if(!read.is_open())
             throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
         
-        // Stream through the file; when a full record is parsed, instantiate and store
+        // Traverse through the file.  When record is parse collect record in dataset.
         for(char character = ' '; !read.eof(); read.get(character))
         {
             if(isRecord(character))
@@ -80,37 +80,32 @@ void Parse :: Load_Library()
                 {
                     case BOOK:
                     {
-                        Media* b = new Book(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
-                                              fieldPackage.publisher, fieldPackage.city, fieldPackage.year, fieldPackage.series, fieldPackage.notes);
-                        
-                        BooksMemory.push_back(b);
+                        BooksMemory.push_back(new Book(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
+                                                       fieldPackage.publisher, fieldPackage.city, fieldPackage.year, fieldPackage.series, fieldPackage.notes));
                         
                         break;
                     }
+                        
                     case PERIODICAL:
                     {
-                        Media* p = new Periodical(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
-                                                    fieldPackage.publisher, fieldPackage.publishing_history, fieldPackage.series, fieldPackage.notes,
-                                                    fieldPackage.related_titles, fieldPackage.other_forms_of_titles, fieldPackage.gov_doc_number);
-                        
-                        PeriodicalMemory.push_back(p);
-                        
+                        PeriodicalMemory.push_back(new Periodical(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.author, fieldPackage.description,
+                                                                  fieldPackage.publisher, fieldPackage.publishing_history, fieldPackage.series, fieldPackage.notes,
+                                                                  fieldPackage.related_titles, fieldPackage.other_forms_of_titles, fieldPackage.gov_doc_number));
+                    
                         break;
                     }
+                        
                     case FILM:
                     {
-                        Media* f = new Film(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.director, fieldPackage.notes, fieldPackage.year);
-                        
-                        FilmsMemory.push_back(f);
+                        FilmsMemory.push_back(new Film(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.director, fieldPackage.notes, fieldPackage.year));
                         
                         break;
                     }
+                        
                     case VIDEO:
                     {
-                        Media* v = new Video(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.description,
-                                               fieldPackage.distibutor, fieldPackage.notes, fieldPackage.series, fieldPackage.label);
-                        
-                        VideosMemory.push_back(v);
+                        VideosMemory.push_back(new Video(fieldPackage.callNumber, fieldPackage.title, fieldPackage.subject, fieldPackage.description,
+                                                          fieldPackage.distibutor, fieldPackage.notes, fieldPackage.series, fieldPackage.label));
                         
                         break;
                     }
@@ -466,7 +461,9 @@ bool Parse :: isRecord(char character)
                             field = "";
                             return true;
                         }
+                        
                         else field += character;
+                        
                         return false;
                         
                     case TITLE_FIELD:
