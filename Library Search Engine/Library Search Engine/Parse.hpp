@@ -123,6 +123,9 @@ private:
     //Boolean logic to determine if do-while loop is valid
     bool isValid;
     
+    // Determines if information was collected
+    bool informationFound;
+    
     // Declare ifstream variable
     std::ifstream read;
     
@@ -131,7 +134,7 @@ private:
     std::vector <Media*> Library_Records;
     
     // Stores memory of each media type once file is successfully read
-    std::vector<Media*> BooksMemory, PeriodicalMemory, FilmsMemory, VideosMemory;
+    std::vector <Media*> BooksMemory, PeriodicalMemory, FilmsMemory, VideosMemory;
     
     // Declare SEARCH_TYPE variable as class member
     SEARCH_TYPE search;
@@ -164,6 +167,9 @@ public:
 
     // Implements configurations
     void Router();
+    
+    // Assists with executing logic
+    void Controller_Helper();
 
     // Executes logic
     void Controller();
@@ -187,7 +193,7 @@ public:
     void searchType(int selection);
 
     // Determine label utilized through MEDIA_TYPE enum
-    void mediaType(const std::string fileName);
+    void MediaType(const std::string fileName);
 
     // Determine label utilized through FIELD_TYPE enum
     FIELD_TYPE fieldType(const std::string fieldName);

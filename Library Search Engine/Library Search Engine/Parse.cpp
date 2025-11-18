@@ -52,6 +52,8 @@ Parse :: Parse()
     
     this -> isValid = false;
     
+    this -> informationFound = false;
+    
     this -> m = nullptr;
 }
 
@@ -65,7 +67,7 @@ void Parse :: Load_Library()
     {
         read.open(fileName[index]);
         
-        mediaType(fileName[index]);
+        MediaType(fileName[index]);
         
         if(!read.is_open())
             throw std::runtime_error("\nError - " + std::string(fileName[index]) + " is unable to open\n\n");
@@ -238,9 +240,17 @@ void Parse :: Router()
         std::cin >> selection;
         
         // Implement controller
-        Controller();
+        Controller_Helper();
         
-        std::cout << "Would you like to begin new search (Y/N) ? ";
+        // Determine if information was found
+        if(!this -> informationFound)
+            std::cout << "\nNo information was found";
+       
+        // Reset value of informationFound
+        else
+            this -> informationFound = false;
+        
+        std::cout << "\n\nWould you like to begin new search (Y/N) ? ";
         std::cin >> select;
         
         if(select != std::tolower(select) == 'n' && std::tolower(select) == 'y')
@@ -253,8 +263,8 @@ void Parse :: Router()
 }
 
 // -------------------------------------------------------------------------------------------
-// Executes logic
-void Parse :: Controller()
+// Assists with executing logic
+void Parse :: Controller_Helper()
 {
     // Assign value to search enum
     searchType(selection);
@@ -278,96 +288,123 @@ void Parse :: Controller()
     
     std::cin >> this -> keyword;
     
+    // Reset informationFound at start of each search
+    this -> informationFound = false;
+    
     // Clear Library_Records if it's currently storing data
-    if(! Library_Records.empty())
+    if(!Library_Records.empty())
         Library_Records.clear();
     
-    // Collect book data that matches search
-    for (Media* b : BooksMemory)
+    // Store file names
+    const std::string fileName[] = {"book.txt", "periodic.txt", "film.txt", "video.txt"};
+    
+    for(int i = 0; i < sizeof(fileName) / sizeof(fileName[0]); i++)
     {
-        switch (search)
-        {
-            case CALL_NUMBER: if (b -> Contains_Call_Number(keyword)) Library_Records.push_back(b); break;
-                
-            case TITLE:       if (b -> Contains_Title(keyword))       Library_Records.push_back(b); break;
-                
-            case SUBJECT:     if (b -> Contains_Subject(keyword))     Library_Records.push_back(b); break;
-                
-            case OTHER:       if (b -> Contains_Other(keyword))       Library_Records.push_back(b); break;
-                
-            default: break;
-        }
+        MediaType(fileName[i]);
+        
+        Controller();
+        
+        if (!Library_Records.empty())
+            Library_Records[0]->Print(search, Library_Records);
+       
+        Library_Records.clear();
     }
-    
-    if (!Library_Records.empty())
-        Library_Records[0]->Print(search, Library_Records);
-    
-   
-    Library_Records.clear();
-    
-    // Collect periodical data that matches search
-    for (Media* p : PeriodicalMemory)
+}
+
+// -------------------------------------------------------------------------------------------
+// Executes logic
+void Parse :: Controller()
+{
+    switch(media)
     {
-        switch (search)
-        {
-            case CALL_NUMBER: if (p -> Contains_Call_Number(keyword)) Library_Records.push_back(p); break;
-                
-            case TITLE:       if (p -> Contains_Title(keyword))       Library_Records.push_back(p); break;
-                
-            case SUBJECT:     if (p -> Contains_Subject(keyword))     Library_Records.push_back(p); break;
-                
-            case OTHER:       if (p -> Contains_Other(keyword))       Library_Records.push_back(p); break;
-                
-            default: break;
-        }
+        case BOOK:
+            
+            // Collect book data that matches search
+            for (Media* b : BooksMemory)
+            {
+                switch (search)
+                {
+                    case CALL_NUMBER: if (b -> Contains_Call_Number(keyword)) { Library_Records.push_back(b); this -> informationFound = true; } break;
+                        
+                    case TITLE:       if (b -> Contains_Title(keyword))       { Library_Records.push_back(b); this -> informationFound = true; } break;
+                        
+                    case SUBJECT:     if (b -> Contains_Subject(keyword))     { Library_Records.push_back(b); this -> informationFound = true; } break;
+                        
+                    case OTHER:       if (b -> Contains_Other(keyword))       { Library_Records.push_back(b); this -> informationFound = true; } break;
+                        
+                    default: break;
+                }
+            }
+            
+            break;
+            
+        case PERIODICAL:
+            
+            // Collect periodical data that matches search
+            for (Media* p : PeriodicalMemory)
+            {
+                switch (search)
+                {
+                    case CALL_NUMBER: if (p -> Contains_Call_Number(keyword)) { Library_Records.push_back(p); this -> informationFound = true; } break;
+                        
+                    case TITLE:       if (p -> Contains_Title(keyword))       { Library_Records.push_back(p); this -> informationFound = true; } break;
+                        
+                    case SUBJECT:     if (p -> Contains_Subject(keyword))     { Library_Records.push_back(p); this -> informationFound = true; } break;
+                        
+                    case OTHER:       if (p -> Contains_Other(keyword))       { Library_Records.push_back(p); this -> informationFound = true; } break;
+                        
+                    default: break;
+                }
+            }
+            
+            break;
+            
+        case FILM:
+            
+            // Collect film data that matches search
+            for (Media* f : FilmsMemory)
+            {
+                switch (search)
+                {
+                    case CALL_NUMBER: if (f -> Contains_Call_Number(keyword)) { Library_Records.push_back(f); this -> informationFound = true; } break;
+                        
+                    case TITLE:       if (f -> Contains_Title(keyword))       { Library_Records.push_back(f); this -> informationFound = true; } break;
+                        
+                    case SUBJECT:     if (f -> Contains_Subject(keyword))     { Library_Records.push_back(f); this -> informationFound = true; } break;
+                        
+                    case OTHER:       if (f -> Contains_Other(keyword))       { Library_Records.push_back(f); this -> informationFound = true; } break;
+                        
+                    default: break;
+                }
+            }
+            
+            break;
+    
+        case VIDEO:
+            
+            // Collect video data that matches search
+            for (Media* v : VideosMemory)
+            {
+                switch (search)
+                {
+                    case CALL_NUMBER: if (v -> Contains_Call_Number(keyword)) { Library_Records.push_back(v); this -> informationFound = true; } break;
+                        
+                    case TITLE:       if (v -> Contains_Title(keyword))       { Library_Records.push_back(v); this -> informationFound = true; } break;
+                        
+                    case SUBJECT:     if (v -> Contains_Subject(keyword))     { Library_Records.push_back(v); this -> informationFound = true; } break;
+                        
+                    case OTHER:       if (v -> Contains_Other(keyword))       { Library_Records.push_back(v); this -> informationFound = true; } break;
+                        
+                    default: break;
+                }
+            }
+        
+            break;
+       
+        case MEDIA_TYPE_ERROR:
+        
+            throw std::ios_base::failure( "\n\nError - unable to detect keyword " + std::string(keyword) + "\n\nPlease correct runtime error.\n\n");
     }
-    
-    if (!Library_Records.empty())
-        Library_Records[0]->Print(search, Library_Records);
-    
-    
-    Library_Records.clear();
-    
-    // Collect film data that matches search
-    for (Media* f : FilmsMemory)
-    {
-        switch (search)
-        {
-            case CALL_NUMBER: if (f -> Contains_Call_Number(keyword)) Library_Records.push_back(f); break;
-                
-            case TITLE:       if (f -> Contains_Title(keyword))       Library_Records.push_back(f); break;
-                
-            case SUBJECT:     if (f -> Contains_Subject(keyword))     Library_Records.push_back(f); break;
-                
-            case OTHER:       if (f -> Contains_Other(keyword))       Library_Records.push_back(f); break;
-                
-            default: break;
-        }
-    }
-    
-    if (!Library_Records.empty())
-        Library_Records[0]->Print(search, Library_Records);
-    
-    Library_Records.clear();
-    
-    // Collect video data that matches search
-    for (Media* v : VideosMemory)
-    {
-        switch (search)
-        {
-            case CALL_NUMBER: if (v -> Contains_Call_Number(keyword)) Library_Records.push_back(v); break;
-                
-            case TITLE:       if (v -> Contains_Title(keyword))       Library_Records.push_back(v); break;
-                
-            case SUBJECT:     if (v -> Contains_Subject(keyword))     Library_Records.push_back(v); break;
-                
-            case OTHER:       if (v -> Contains_Other(keyword))       Library_Records.push_back(v); break;
-                
-            default: break;
-        }
-    }
-    if (!Library_Records.empty())
-        Library_Records[0]->Print(search, Library_Records);
 }
 
 // -------------------------------------------------------------------------------------------
@@ -1652,7 +1689,7 @@ void Parse :: searchType(int selection)
 
 // -------------------------------------------------------------------------------------------
 // Determine selected field through MEDIA_TYPE enum
-void Parse :: mediaType(const std::string fileName)
+void Parse :: MediaType(const std::string fileName)
 {
     if(fileName == "book.txt")
         media = MEDIA_TYPE :: BOOK;
